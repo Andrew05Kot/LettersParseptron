@@ -1,0 +1,42 @@
+.container {
+
+  display: flex;
+
+  .fields {
+    width: 400px;
+    height: 500px;
+
+    .field {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+
+      &.white {
+        background-color: #ffffff;
+        color: black;
+      }
+
+      &.black {
+        background-color: #000000;
+        color: white;
+      }
+    }
+  }
+
+  .submit {
+    display: flex;
+    align-items: flex-end;
+
+    .buttons {
+      display: flex;
+      justify-content: space-evenly;
+
+      button {
+        margin-left: 50px;
+      }
+    }
+  }
+
+}

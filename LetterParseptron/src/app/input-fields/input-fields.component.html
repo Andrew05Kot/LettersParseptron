@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="fields">
+    <mat-grid-list cols="8" rowHeight="1:1">
+      <ng-container *ngFor="let field of fields; let i = index">
+        <mat-grid-tile>
+          <div
+            class="field"
+            (click)="changeFieldValue(i)"
+            [ngClass]="{ 'black': field === 1, 'white': field ===0 }"
+          >
+            {{field}}
+          </div>
+        </mat-grid-tile>
+      </ng-container>
+    </mat-grid-list>
+  </div>
+
+  <div class="submit">
+    <div class="buttons">
+      <button mat-raised-button color="warn">Додати</button>
+      <button mat-raised-button color="warn" (click)="cancel()">Очистити</button>
+    </div>
+  </div>
+</div>

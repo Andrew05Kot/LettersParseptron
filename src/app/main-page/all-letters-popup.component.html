@@ -1,0 +1,24 @@
+<div class="container">
+
+  <div class="letters">
+
+    <div class="letter" *ngFor="let letter of letters">
+      <mat-grid-list cols="5" rowHeight="1:1">
+        <ng-container *ngFor="let row of letter; let i = index">
+          <ng-container *ngFor="let cell of row; let j = index">
+            <mat-grid-tile>
+              <div
+                class="field"
+                [ngClass]="{ 'black': cell === 1, 'white': cell === 0 }"
+              >
+                {{cell}}
+              </div>
+            </mat-grid-tile>
+          </ng-container>
+        </ng-container>
+      </mat-grid-list>
+    </div>
+
+  </div>
+
+</div>

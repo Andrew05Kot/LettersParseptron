@@ -1,0 +1,40 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  .letters {
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+    height: 200px;
+    flex-wrap: wrap;
+
+    .letter {
+      width: 175px;
+      height: 245px;
+      margin: 20px;
+      border: 1px solid black;
+
+      .field {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 35px;
+        height: 35px;
+
+        &.white {
+          background-color: #ffffff;
+          color: black;
+        }
+
+        &.black {
+          background-color: #000000;
+          color: white;
+        }
+      }
+    }
+  }
+
+}

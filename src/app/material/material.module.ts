@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {MatButtonModule} from "@angular/material/button";
-import {MatDialogModule} from "@angular/material/dialog";
+import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {MatGridListModule} from "@angular/material/grid-list";
 
 @NgModule({
@@ -8,6 +8,12 @@ import {MatGridListModule} from "@angular/material/grid-list";
     MatButtonModule,
     MatDialogModule,
     MatGridListModule
+  ],
+  providers: [
+    {
+      provide: MatDialogRef,
+      useValue: {}
+    },
   ]
 })
 export class MaterialModule { }

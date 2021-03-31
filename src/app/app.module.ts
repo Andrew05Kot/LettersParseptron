@@ -3,13 +3,13 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {InputFieldsComponent} from './input-fields/input-fields.component';
 import {MaterialModule} from "./material/material.module";
+import {AllLettersPopupComponent} from './main-page/all-letters-popup.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    InputFieldsComponent
+    AllLettersPopupComponent
   ],
   imports: [
     BrowserModule,
@@ -20,4 +20,5 @@ import {MaterialModule} from "./material/material.module";
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

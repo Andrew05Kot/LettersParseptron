@@ -1,7 +1,36 @@
 <div class="container">
-  <div class="button">
-    <button mat-raised-button color="warn" (click)="openPopup()">Input latter</button>
+
+  <div class="header-section">
+    <button mat-raised-button color="warn" (click)="openLettersPopup()">Побачити букви</button>
   </div>
+
+  <div class="input-letter-section">
+    <h1>Намалюйте букву</h1>
+    <div class="letter">
+      <mat-grid-list cols="5" rowHeight="1:1">
+        <ng-container *ngFor="let cell of cells; let i = index">
+          <mat-grid-tile>
+            <div
+              class="field"
+              (click)="changeCellValue(i)"
+              [ngClass]="{ 'black': cell === 1, 'white': cell ===0 }"
+            >
+              {{cell}}
+            </div>
+          </mat-grid-tile>
+        </ng-container>
+      </mat-grid-list>
+    </div>
+    <div class="buttons">
+      <button mat-raised-button color="warn" (click)="submit()">Внести</button>
+      <button mat-raised-button color="warn" (click)="cancel()">Очистити</button>
+    </div>
+  </div>
+
+  <div class="result-section">
+    <h1>Результуюча буква: </h1> <h1 class="result-letter"> {{resultLetter}}</h1>
+  </div>
+
 </div>
 
 <router-outlet></router-outlet>

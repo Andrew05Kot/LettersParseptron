@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Letters} from "../constnants/letters";
 
 @Component({
@@ -6,7 +6,7 @@ import {Letters} from "../constnants/letters";
   templateUrl: './all-letters-popup.component.html',
   styleUrls: ['./all-letters-popup.component.scss']
 })
-export class AllLettersPopupComponent implements OnInit {
+export class AllLettersPopupComponent {
 
   letters = new Array<number[][]>();
 
@@ -14,13 +14,6 @@ export class AllLettersPopupComponent implements OnInit {
     for (let letters of Letters.LETTERS) {
       this.letters.push(letters);
     }
-
-  }
-
-  private initEmptyCells(): void {
-  }
-
-  ngOnInit(): void {
   }
 
 }

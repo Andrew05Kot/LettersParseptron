@@ -2,6 +2,8 @@ import {Component} from '@angular/core';
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {AllLettersPopupComponent} from "./main-page/all-letters-popup.component";
 import {LearningService} from "./services/learning.service";
+import {Letters} from "./constnants/letters";
+import {Alphabet} from "./constnants/alphabet";
 
 @Component({
   selector: 'app-root',
@@ -11,7 +13,8 @@ import {LearningService} from "./services/learning.service";
 export class AppComponent {
 
   cells: number[] = [];
-  resultLetter: string = 'А';
+  matrixCells: any[] = [];
+  resultLetter: string = '';
 
   constructor(private learningService: LearningService,
               public dialog: MatDialog,
@@ -32,11 +35,37 @@ export class AppComponent {
   }
 
   submit(): void {
-    console.log(this.cells);
+    this.matrixCells = [];
+    this.convertArrayToMatrix(this.cells);
+
+    this.checkLetter();
+  }
+
+  private checkLetter() {
+    let currentLetterPosition = this.findCurrentLetterPosition();
+    if (currentLetterPosition) {
+      let res = this.learningService.comparisonSum(this.matrixCells, currentLetterPosition) < 0;
+      this.resultLetter = res ? Alphabet.ALPHABET[currentLetterPosition] : '';
+    }
+    else {
+      this.resultLetter = '';
+    }
+  }
+
+  private convertArrayToMatrix(array: number[]) {
+    let row = new Array<number>();
+    for (let i = 0; i < 35; i++) {
+      row.push(array[i]);
+      if ((i + 1) % 5 === 0) {
+        this.matrixCells.push(row);
+        row = new Array<number>();
+      }
+    }
   }
 
   cancel(): void {
     this.initEmptyCells();
+    this.resultLetter = '';
   }
 
   private initEmptyCells(): void {
@@ -45,14 +74,23 @@ export class AppComponent {
     }
   }
 
+  private findCurrentLetterPosition() {
+    let currentLetterPosition = NaN;
+    let iterator = 0;
+    Letters.LETTERS.forEach((letter => {
+      let i;
+      for (i = 0; i < 7; i++) {
+        if (letter[i].join() == this.matrixCells[i].join()) {
+          if (i === 6) {
+            currentLetterPosition = iterator;
+          }
+        } else {
+          break;
+        }
+      }
+      iterator++;
+    }));
+    return currentLetterPosition;
+  }
 
-  // openPopup(): void {
-  //   this.dialogRef = this.dialog.open(InputFieldsComponent, {
-  //     height: '550px',
-  //     width: '900px',
-  //   });
-  //   this.dialogRef.afterClosed().subscribe((result) => {
-  //     console.log(result);
-  //   });
-  // }
 }

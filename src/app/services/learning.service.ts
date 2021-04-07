@@ -10,56 +10,62 @@ export class LearningService {
   public theta: number = 0;
   letters = new Array<number[][]>();
   d: number = 0;
-  weight =  this.generateWeights(7, 5);
+  weights: number[][] = [];
 
   constructor() {
     this.initTheta();
-
-
     this.initArrays();
 
-    console.log('Синаптичні ваги: ', this.weight);
-
-    this.learn();
+    this.generateWeights(7, 5).then((res) => {
+      //method learn to called method that will change weights
+        this.learn().then(() => {
+          console.log(GeneralWeights.WEIGHTS);
+        });
+      }
+    );
   }
 
-  public learn(): void {
+  public learn(): Promise<void> {
+    return new Promise<void>((resolve) => {
 
+      let tot = 0;
+      for (let n = 0; n < Alphabet.ALPHABET.length; n++) {
+        let counter;
+        while (true) {
+          counter = n;
+          for (let i = n; i < Alphabet.ALPHABET.length; i++) {
 
+            this.d = Alphabet.ALPHABET[i] === Alphabet.ALPHABET[n] ? 1 : 0;
 
-    for (let n = 0; n < Alphabet.ALPHABET.length; n++) {
-      let counter;
-      while (true) {
-        counter = n;
-        for (let i = n; i < Alphabet.ALPHABET.length; i++) {
+            console.log("Перевірка літери ", Alphabet.ALPHABET[i], ': ');
+            const x = this.letters[i];
+            const res: boolean = this.isRight(this.getSum(x));
 
-          this.d = Alphabet.ALPHABET[i] === Alphabet.ALPHABET[n] ? 1 : 0;
-
-          console.log("Перевірка літери ", Alphabet.ALPHABET[i], ': ');
-          const x = this.letters[i];
-          const res: boolean = this.isRight(this.getSum(x));
-
-          if ((i !== n  && res) || (i === n && !res)) {
-            console.log('Не правильно');
-            i--;
-            this.changeWeights(x, res, this.d);
-
-            console.log('');
-          } else {
-            GeneralWeights.WEIGHTS.push(this.weight);
-            console.log('Ваги підібрано');
-            console.log('');
-            counter++;
-          }
-          if(counter === 33) {
-            console.log('Навчання завершене');
-            console.log(GeneralWeights.WEIGHTS);
-            return;
+            if (i !== n && res || i === n && !res) {
+              console.log('Не правильно');
+              i--;
+              this.changeWeights(x, res, this.d);
+              console.log('');
+            } else {
+              GeneralWeights.WEIGHTS.push(this.weights);
+              console.log('Ваги підібрано');
+              console.log('');
+              counter++;
+            }
+            tot++;
+            if (counter === 33) {
+              resolve();
+              return;
+            }
+            if (tot == 250) {
+              resolve();
+              return;
+            }
           }
         }
       }
-    }
 
+    });
   }
 
   comparisonSum(twoDimensionalArray: number[][], index: number): number {
@@ -76,17 +82,24 @@ export class LearningService {
     return sum;
   }
 
-  generateWeights(rows: number, cols: number): number[][] {
-    return Array.from({ length: rows }).map(() =>
-      Array.from({ length: cols }).map(() => Math.random())
-    );
+  generateWeights(rows: number, cols: number): Promise<void> {
+    return new Promise(resolve => {
+      this.weights = Array.from({length: rows}).map(() =>
+        Array.from({length: cols}).map(() => {
+          const result = (Math.random() * (1 + 1)) - 1;
+          // return result < 0 ? result : result + 1;
+          return 7;
+        }));
+      console.log("Статистичны ваги: ", this.weights);
+      resolve();
+    });
   }
 
-  public getSum(x: number[][]): number{
+  public getSum(x: number[][]): number {
     let sum = 0;
-    for (let i = 0; i < 7; i++){
-      for (let j = 0; j < 5; j++){
-        sum += x[i][j] * this.weight[i][j];
+    for (let i = 0; i < 7; i++) {
+      for (let j = 0; j < 5; j++) {
+        sum += x[i][j] * this.weights[i][j];
       }
     }
     console.log("Сума = ", sum);
@@ -94,25 +107,28 @@ export class LearningService {
   }
 
   public isRight(sum: number): boolean {
+    console.log(sum, " >= ", this.theta, ":  ", sum >= this.theta)
     return sum >= this.theta;
   }
 
-  private changeWeights(x: number[][], y: boolean, d: number): void {
-    console.log("Нові синаптичні ваги: ");
-    let ni = 2.5;
-    let e = d - (y ? 1 : 0);
-
-    for (let i = 0; i < 7; i++) {
-      for (let j = 0; j < 5; j++) {
-        this.weight[i][j] += ni * e * x[i][j];
-
+  private async changeWeights(x: number[][], y: boolean, d: number): Promise<void> {
+    return new Promise(resolve => {
+      console.log("Нові синаптичні ваги: ");
+      let ni = 2.5;
+      let e = d - (y ? 1 : 0)
+      for (let i = 0; i < 7; i++) {
+        for (let j = 0; j < 5; j++) {
+          // this.weights[i][j] += ni * e * x[i][j];
+          this.weights[i][j] = 1;
+        }
       }
-    }
-    console.log(this.weight);
+      console.log(this.weights);
+      resolve();
+    });
   }
 
   private initTheta(): void {
-    this.theta = Math.random() * 2 -1;
+    this.theta = Math.random() * 2 - 1;
     console.log('θ = ', this.theta);
     console.log('');
   }

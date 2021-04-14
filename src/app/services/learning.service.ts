@@ -10,22 +10,24 @@ export class LearningService {
   public theta: number = 0;
   letters = new Array<number[][]>();
   d: number = 0;
-  weights: number[][] = [];
+  // weights: number[][] = [];
 
   constructor() {
     this.initTheta();
     this.initArrays();
 
     this.generateWeights(7, 5).then((res) => {
+      console.log("Ваги: ", res);
+      const weights = res;
       //method learn to called method that will change weights
-        this.learn().then(() => {
+        this.learn(weights).then(() => {
           console.log(GeneralWeights.WEIGHTS);
         });
       }
     );
   }
 
-  public learn(): Promise<void> {
+  public learn(weights: number[][]): Promise<void> {
     return new Promise<void>((resolve) => {
 
       let tot = 0;
@@ -37,19 +39,19 @@ export class LearningService {
 
             this.d = Alphabet.ALPHABET[i] === Alphabet.ALPHABET[n] ? 1 : 0;
 
-            console.log("Перевірка літери ", Alphabet.ALPHABET[i], ': ');
+            // console.log("Перевірка літери ", Alphabet.ALPHABET[i], ': ');
             const x = this.letters[i];
-            const res: boolean = this.isRight(this.getSum(x));
+            const res: boolean = this.isRight(this.getSum(x, weights));
 
             if (i !== n && res || i === n && !res) {
-              console.log('Не правильно');
+              // console.log('Не правильно');
               i--;
-              this.changeWeights(x, res, this.d);
-              console.log('');
+              this.changeWeights(weights, x, res, this.d);
+              // console.log('');
             } else {
-              GeneralWeights.WEIGHTS.push(this.weights);
-              console.log('Ваги підібрано');
-              console.log('');
+              GeneralWeights.WEIGHTS.push(weights);
+              // console.log('Ваги підібрано');
+              // console.log('');
               counter++;
             }
             tot++;
@@ -57,7 +59,7 @@ export class LearningService {
               resolve();
               return;
             }
-            if (tot == 250) {
+            if (tot == 100) {
               resolve();
               return;
             }
@@ -82,24 +84,27 @@ export class LearningService {
     return sum;
   }
 
-  generateWeights(rows: number, cols: number): Promise<void> {
+  generateWeights(rows: number, cols: number): Promise<any[]> {
     return new Promise(resolve => {
-      this.weights = Array.from({length: rows}).map(() =>
-        Array.from({length: cols}).map(() => {
-          const result = (Math.random() * (1 + 1)) - 1;
-          // return result < 0 ? result : result + 1;
-          return 7;
-        }));
-      console.log("Статистичны ваги: ", this.weights);
-      resolve();
+      let weights: number[][] = [[]];
+      for (let i = 0; i < 7; i++) {
+        weights[i] = [];
+        for (let j = 0; j < 5; j++) {
+          // weights[i][j] = Math.random() * 2;
+          weights[i][j] = 5;
+        }
+        console.log(i, ' >>> ', weights[i])
+      }
+      console.log("Статистичны ваги: ", weights);
+      resolve(weights);
     });
   }
 
-  public getSum(x: number[][]): number {
+  public getSum(x: number[][], weights: number[][]): number {
     let sum = 0;
     for (let i = 0; i < 7; i++) {
       for (let j = 0; j < 5; j++) {
-        sum += x[i][j] * this.weights[i][j];
+        sum += x[i][j] * weights[i][j];
       }
     }
     console.log("Сума = ", sum);
@@ -111,7 +116,7 @@ export class LearningService {
     return sum >= this.theta;
   }
 
-  private async changeWeights(x: number[][], y: boolean, d: number): Promise<void> {
+  private async changeWeights(weights: number[][],  x: number[][], y: boolean, d: number): Promise<void> {
     return new Promise(resolve => {
       console.log("Нові синаптичні ваги: ");
       let ni = 2.5;
@@ -119,10 +124,10 @@ export class LearningService {
       for (let i = 0; i < 7; i++) {
         for (let j = 0; j < 5; j++) {
           // this.weights[i][j] += ni * e * x[i][j];
-          this.weights[i][j] = 1;
+          weights[i][j] = 8;
         }
       }
-      console.log(this.weights);
+      console.log('changed:', weights);
       resolve();
     });
   }

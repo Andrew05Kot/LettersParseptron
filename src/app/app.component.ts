@@ -1,9 +1,8 @@
 import {Component} from '@angular/core';
-import {MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {AllLettersPopupComponent} from "./main-page/all-letters-popup.component";
-import {LearningService} from "./services/learning.service";
-import {Letters} from "./constnants/letters";
-import {Alphabet} from "./constnants/alphabet";
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {AllLettersPopupComponent} from './main-page/all-letters-popup.component';
+import {LearningService} from './services/learning.service';
+import {Alphabet} from './constnants/alphabet';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +13,7 @@ export class AppComponent {
 
   cells: number[] = [];
   matrixCells: any[] = [];
-  resultLetter: string = '';
+  resultLetter = '';
 
   constructor(private learningService: LearningService,
               public dialog: MatDialog,
@@ -37,22 +36,15 @@ export class AppComponent {
   submit(): void {
     this.matrixCells = [];
     this.convertArrayToMatrix(this.cells);
-
-    this.checkLetter();
+    this.resultLetter = Alphabet.ALPHABET[ this.learningService.checkLetter(this.matrixCells) ];
   }
 
-  private checkLetter() {
-    let currentLetterPosition = this.findCurrentLetterPosition();
-    if (currentLetterPosition) {
-      let res = this.learningService.comparisonSum(this.matrixCells, currentLetterPosition) < 0;
-      this.resultLetter = res ? Alphabet.ALPHABET[currentLetterPosition] : '';
-    }
-    else {
-      this.resultLetter = '';
-    }
+  cancel(): void {
+    this.initEmptyCells();
+    this.resultLetter = '';
   }
 
-  private convertArrayToMatrix(array: number[]) {
+  private convertArrayToMatrix(array: number[]): void {
     let row = new Array<number>();
     for (let i = 0; i < 35; i++) {
       row.push(array[i]);
@@ -63,34 +55,10 @@ export class AppComponent {
     }
   }
 
-  cancel(): void {
-    this.initEmptyCells();
-    this.resultLetter = '';
-  }
-
   private initEmptyCells(): void {
     for (let i = 0; i < 35; i++) {
       this.cells[i] = 0;
     }
-  }
-
-  private findCurrentLetterPosition() {
-    let currentLetterPosition = NaN;
-    let iterator = 0;
-    Letters.LETTERS.forEach((letter => {
-      let i;
-      for (i = 0; i < 7; i++) {
-        if (letter[i].join() == this.matrixCells[i].join()) {
-          if (i === 6) {
-            currentLetterPosition = iterator;
-          }
-        } else {
-          break;
-        }
-      }
-      iterator++;
-    }));
-    return currentLetterPosition;
   }
 
 }

@@ -1,6 +1,7 @@
 {
   "name": "letter-parseptron",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "etter-parseptron app",
   "scripts": {
     "ng": "ng",
     "start": "node server.js",

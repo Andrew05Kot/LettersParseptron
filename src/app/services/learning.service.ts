@@ -16,7 +16,7 @@ export class LearningService {
 
   private learn(): void {
     for (let i = 0; i < Letters.LETTERS.length; i++) {
-      console.log('Learning ', Alphabet.ALPHABET[i], '...')
+      console.log('Learning ', Alphabet.ALPHABET[i], '...');
       this.neurons.push(this.learnLetter(new NeuronModel(i), Letters.LETTERS[i]));
     }
     console.log('Completed!');

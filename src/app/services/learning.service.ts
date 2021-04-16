@@ -16,7 +16,7 @@ export class LearningService {
 
   private learn(): void {
     for (let i = 0; i < Letters.LETTERS.length; i++) {
-      console.log('Learning ', Alphabet.ALPHABET[i], '...');
+      // console.log('Learning ', Alphabet.ALPHABET[i], '...');
       this.neurons.push(this.learnLetter(new NeuronModel(i), Letters.LETTERS[i]));
     }
     console.log('Completed!');
@@ -45,7 +45,7 @@ export class LearningService {
     let id = 34;
     this.neurons.forEach(neuron => {
       const isRight = neuron.isRightLetter(letter);
-      console.log(neuron.id, ' ', isRight);
+      // console.log(neuron.id, ' ', isRight);
       if (isRight) {
         id = neuron.id;
       }

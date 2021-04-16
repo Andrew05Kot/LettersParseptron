@@ -24,7 +24,7 @@ export class NeuronModel {
     return sum >= 0;
   }
 
-  changeWeights(letter: number[][], eps: number) {
+  changeWeights(letter: number[][], eps: number): void {
     this.bias += this.speed * eps;
     for (let i = 0; i < 7; i++) {
       for (let j = 0; j < 5; j++) {
